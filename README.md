@@ -1,4 +1,4 @@
-<h1 align="center"><a href="#" target="_blank">Enterprise AI Resource Planning</a></h1>
+<h1 align="center"><a href="#" target="_blank">Enterprise Resource Plan</a></h1>
 <div align="center">
  <strong>
   Next generation artificial intelligent ERP system
@@ -37,39 +37,100 @@ It's completely free, if this project is helpful to you, please click on Star. T
 [Enginsh](https://github.com/wansenai/eairp/blob/master/README.md) / [简体中文](https://github.com/wansenai/eairp/blob/master/README_ZH.md)
 
 ## Online preview
-- If you are in Chinese Mainland, please visit [eairp.cn](https://eairp.cn/)
-- Otherwise, please visit [erp.wansenai.com](https://erp.wansenai.com/)
-- test account (测试账号): admin
-- test password (测试密码): 123456
-
-Some functional modules are being developed and improved, please refer to our [to-do list](https://github.com/wansenai/eairp/issues/118) / [开发清单](https://github.com/wansenai/eairp/issues/124). It's not easy to generate electricity with love.
+- test account: admin
+- test password: 123456
 
 ## Quick Start
-We provide a more comprehensive Docker deployment method, which can be found in [eairp-docker repository](https://github.com/wansenai/eairp-docker/)
 
-## System screenshot (only part)
-![](images/login-page-en.png)
-![](images/home-page-zh.png)
-![](images/retail-shipment.png)
-![](images/product-add-one.png)
-![](images/product-add-two.png)
-![](images/add-menu-zh.png)
-![](images/role-permission-zh.png)
+We provide a more comprehensive Docker deployment method, which can be found in [docker folder](https://github.com/eairps/eairp/blob/master/docker/README.md)
 
-## Other Repository
-- [eairp-app](https://github.com/wansenai/eairp-app)  **Note:** (The application currently needs to wait for the web side to be fully developed before proceeding)
+### Prerequisites
+- Docker Engine 20.10+
+- Docker Compose v2.17+
+
+### 1. Docker Compose (Recommended)
+
+**Applicable scenarios**: There is no MySQL/Redis environment locally, and a complete service stack needs to be started quickly.
+
+```bash
+# Clone deployment repository
+git clone https://github.com/eairps/eairp.git
+
+cd eairp
+
+# Start services
+docker compose up -d
+```
+
+### 2. Docker standalone container
+
+**Applicable scenarios**: MySQL/Redis service already exists, and custom database configuration is required.
+
+**Step 1**: Create a Private Network
+
+```console
+docker network create eairp-net
+```
+
+**Step 2**: Start the MySQL container
+
+```console
+docker run -d --name mysql-eairp \
+  --network eairp-net \
+  -p 3306:3306 \
+  -v /path/to/mysql:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=123456 \
+  -e MYSQL_USER=eairp \
+  -e MYSQL_PASSWORD=123456 \
+  mysql:8.3 \
+  --character-set-server=utf8mb4 \
+  --collation-server=utf8mb4_bin
+```
+
+**Step 3**: Start the Redis container
+
+```console
+docker run -d --name redis-eairp \
+  --network eairp-net \
+  -p 6379:6379 \
+  -v /path/to/redis/data:/data \
+  redis:7.0 \
+  redis-server --requirepass 123456
+```
+
+**Step 4**: Start the Eairp container
+
+Configuration parameters:
+|  Environment variables   | Explanation  |  Example Value  |  
+|  ----  | ----  | ----  |
+| SPRING_DATASOURCE_URL  | MySQL connection address | jdbc:mysql://mysql-eairp:3306/eairp |
+| SPRING_REDIS_HOST	  | Redis host address | redis-eairp |
+| API_BASE_URL		  | Front-end API basic path | http://your-domain.com/erp-api |
+
+```console
+docker run -d --name eairp \
+  --network eairp-net \
+  -p 3000:80 \
+  -p 8088:8088 \
+  -e SPRING_DATASOURCE_URL="jdbc:mysql://mysql-eairp:3306/eairp" \
+  -e SPRING_DATASOURCE_USERNAME=eairp \
+  -e SPRING_DATASOURCE_PASSWORD=123456 \
+  -e SPRING_REDIS_HOST=redis-eairp \
+  -e SPRING_REDIS_PASSWORD=123456 \
+  wansenai/eairp:latest
+```
 
 ## License
 
 Licensed under either of
 
-- Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or https://opensource.wansenai.com/)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or https://opensource.wansenai.com/mit)
+- Apache License, Version 2.0, [LICENSE-APACHE](LICENSE-APACHE)
+- MIT license [LICENSE-MIT](LICENSE-MIT)
 
 at your option.
 
 ## Community
-微信群: 请添加微信`wansenai`备注ERP开源.
+<img src="images/wechat-group-20250407.jpg" alt="WeChat Group" width="300" />
 
 ## Contribution
 We welcome every contributor, both in terms of code and documentation.

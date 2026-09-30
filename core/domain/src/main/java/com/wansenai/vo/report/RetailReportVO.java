@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2033 WanSen AI Team, Inc. All Rights Reserved.
+ * Copyright 2023-2025 EAIRP Team, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -13,7 +13,7 @@
 package com.wansenai.vo.report;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 import com.wansenai.bo.BigDecimalSerializerBO;
 import com.wansenai.utils.excel.ExcelExport;
 import lombok.Builder;

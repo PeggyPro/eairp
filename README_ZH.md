@@ -34,56 +34,101 @@
 它是完全免费的，如果这个项目对你有帮助，请点击Star。非常感谢。
 
 ## Project
-[Enginsh](https://github.com/wansenai/eairp/blob/master/README.md) / [简体中文](https://github.com/wansenai/eairp/blob/master/README_ZH.md)
+[Enginsh](https://github.com/eairps/eairp/blob/master/README.md) / [简体中文](https://github.com/eairps/eairp/blob/master/README_ZH.md)
 
 ## Online preview
-- [eairp preview / 在线预览](https://erp.wansen.cloud/)
-- 测试账号: wansen
+- 测试账号: admin
 - 测试密码: 123456
 
-一些功能模块正在开发和改进中，请参阅我们的待办事项列表[开发清单](https://github.com/wansenai/eairp/issues/124)。
-
 ## 快速开始
-```shell
-docker pull wansenai/eairp:2.1.1
+我们提供了一种更全面的Docker部署方法，可以在[Docker](https://github.com/eairps/eairp/blob/master/docker/README_ZH.md)文件夹中找到
 
-docker pull wansenai/eairp-web:2.1.1
+### 先决条件
+- Docker Engine 20.10+
+- Docker Compose v2.17+
+
+### 1. Docker Compose（推荐）
+
+**适用场景**: 本地没有MySQL/Redis环境，需要快速启动完整的服务栈。
+
+```bash
+# Clone deployment repository
+git clone https://github.com/eairps/eairp.git
+
+cd eairp
+
+# Start services
+docker compose up -d
 ```
-## 运行服务
-您可以自定义和修改端口8080，请确保您的前端监控的服务端口一致。
-如果要部署到您的域名，则需要将本地主机修改为您的域名。
 
-我们将使用Docker Compose方法进行集成和部署，下一步它很快就会到来：）
+### 2. Docker 独立容器
 
-```shell
-docker run --name eairp -d -p 8080:8088 wansenai/eairp:2.1.1
+**适用场景**: MySQL/Redis服务已经存在，需要自定义数据库配置。
 
-docker run --name eairp-web -d -p 3000:80 -e API_BASE_URL=http://localhost:8080/erp-api wansenai/eairp-web:2.1.1
+**步骤 1**: 创建专用网络
+
+```console
+docker network create eairp-net
 ```
 
-## 系统展示图
-![](images/login-page-zh.png)
-![](images/home-page-zh.png)
-![](images/retail-shipment.png)
-![](images/product-add-one.png)
-![](images/product-add-two.png)
-![](images/add-menu-zh.png)
-![](images/role-permission-zh.png)
+**步骤 2**: 启动 MySQL 容器
 
-## 其他项目
-- [eairp-app](https://github.com/wansenai/eairp-app)  **注意:** (该应用程序当前需要等待web端完全开发后才能继续)
+```console
+docker run -d --name mysql-eairp \
+  --network eairp-net \
+  -p 3306:3306 \
+  -v /path/to/mysql:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=123456 \
+  -e MYSQL_USER=eairp \
+  -e MYSQL_PASSWORD=123456 \
+  mysql:8.3 \
+  --character-set-server=utf8mb4 \
+  --collation-server=utf8mb4_bin
+```
+
+**步骤 3**: 启动 Redis 容器
+
+```console
+docker run -d --name redis-eairp \
+  --network eairp-net \
+  -p 6379:6379 \
+  -v /path/to/redis/data:/data \
+  redis:7.0 \
+  redis-server --requirepass 123456
+```
+
+**步骤 4**: 启动 Eairp 容器
+
+配置参数：
+|  环境变量	   | 说明  |  示例值  |  
+|  ----  | ----  | ----  |
+| SPRING_DATASOURCE_URL  | MySQL connection address | jdbc:mysql://mysql-eairp:3306/eairp |
+| SPRING_REDIS_HOST	  | Redis host address | redis-eairp |
+| API_BASE_URL		  | Front-end API basic path | http://your-domain.com/erp-api |
+
+```console
+docker run -d --name eairp \
+  --network eairp-net \
+  -p 3000:80 \
+  -p 8088:8088 \
+  -e SPRING_DATASOURCE_URL="jdbc:mysql://mysql-eairp:3306/eairp" \
+  -e SPRING_DATASOURCE_USERNAME=eairp \
+  -e SPRING_DATASOURCE_PASSWORD=123456 \
+  -e SPRING_REDIS_HOST=redis-eairp \
+  -e SPRING_REDIS_PASSWORD=123456 \
+  wansenai/eairp:latest
+```
 
 ## License
 
 根据以下任一许可证之一，对本项目中的代码和文档进行许可：
 
-- Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or https://opensource.wansenai.com/)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or https://opensource.wansenai.com/mit)
-
+- Apache License, Version 2.0, [LICENSE-APACHE](LICENSE-APACHE)
+- MIT license [LICENSE-MIT](LICENSE-MIT)
 根据您的选择。
 
 ## 社区
-微信群: 请添加微信`wansenai`备注ERP开源.
+<img src="images/wechat-group-20250407.jpg" alt="WeChat Group" width="300" />
 
 ## 贡献
 我们欢迎每一位贡献者，无论是在代码还是文档方面。

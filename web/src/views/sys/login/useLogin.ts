@@ -1,7 +1,7 @@
 import type {ValidationRule, FormInstance} from 'ant-design-vue/lib/form/Form';
 import type {RuleObject, NamePath} from 'ant-design-vue/lib/form/interface';
 import {ref, computed, unref, Ref} from 'vue';
-import {useI18n} from '/@/hooks/web/useI18n';
+import {useI18n} from '@/hooks/web/useI18n';
 import CryptoJS from 'crypto-js';
 
 export enum LoginStateEnum {
@@ -129,7 +129,8 @@ export function useFormRules(formData?: Recordable) {
                 return {
                     username: accountFormRule,
                     password: passwordFormRule,
-                    phoneNumber: mobileFormRule,
+                    email: emailFormRule,
+                    emailCode: smsFormRule,
                     captcha: captchaFormRule,
                     confirmPassword: [
                         {validator: validateConfirmPassword(formData?.password), trigger: 'change'},

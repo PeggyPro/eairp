@@ -35,11 +35,11 @@
 <script lang="ts" setup>
 import { reactive, ref, computed, unref } from 'vue';
 import { Form, Input, Button } from 'ant-design-vue';
-import { CountdownInput } from '/@/components/CountDown';
+import { CountdownInput } from '@/components/CountDown';
 import LoginFormTitle from './LoginFormTitle.vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useI18n } from '@/hooks/web/useI18n';
 import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
-import {sendEmailCode, sendSmsRegister} from "@/api/sys/user";
+import {sendEmailCode} from "@/api/sys/user";
 import {PageEnum} from "@/enums/pageEnum";
 import {useUserStore} from "@/store/modules/user";
 import {useGo} from "@/hooks/web/usePage";

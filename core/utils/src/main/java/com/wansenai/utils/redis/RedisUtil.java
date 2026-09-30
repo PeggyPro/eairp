@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2033 WanSen AI Team, Inc. All Rights Reserved.
+ * Copyright 2023-2025 EAIRP Team, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -508,7 +508,6 @@ public class RedisUtil {
      *
      * @param key   键
      * @param value 值
-     * @param time  时间(秒)
      * @return
      */
     public boolean lSet(String key, List<Object> value) {

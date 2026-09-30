@@ -26,44 +26,7 @@
 </div>
 <br />
 
-## Project
-[英语](README.md) | [简体中文](./README-zh_CN.md)
-
-### 快速开始
-
-您可以直接使用Docker pull镜像来快速启动。下面是拉取前端镜像的命令
-
-### 拉取镜像
-```shell
-docker pull wansenai/eairp-web:2.1.1
-```
-
-### 运行服务
-请注意该 `API_BASE_URL`参数，这是后端接口映射的地址。如果你是在你的服务器
-上部署，请将此处的localhost地址修改为你的服务器IP地址。
-```shell
-docker run --name eairp-web -d -p 3000:80 -e API_BASE_URL=http://localhost:8080/erp-api wansenai/eairp-web:2.1.1
-```
-如果你想使用Docker部署API，也可以拉取API镜像
-```shell
-docker pull wansenai/eairp:2.1.1
-```
-并且运行API服务
-```shell
-docker run --name eairp -d -p 9998:8088 wansenai/eairp:2.1.1
-```
-
-### 在线预览
-- [eairp 在线预览](https://erp.wansen.cloud/)
-- 测试账号: wansen
-- 测试密码: 123456
-- 部分功能模块正在开发和完善中，请参考我们的[待办事项列表](https://github.com/wansenai/eairp-web/issues/41)。用爱发电并不容易。
-- 如果这个项目对您有帮助，请点击Star。谢谢。
-
-  一些功能模块正在开发和改进中, 请参阅我们的[开发计划](https://github.com/wansenai/eairp-web/issues/42), 用爱发电很不容易, 如果这个项目对你有帮助, 请点击Star非常感谢.
-
-### 代码存储库
-- [wansen-erp](https://github.com/wansenai/wansen-erp) - **ERP Web 模板**
+[English](README.md) | [简体中文](./README-zh_CN.md)
 
 ## 浏览器支持
 
@@ -87,7 +50,7 @@ docker run --name eairp -d -p 9998:8088 wansenai/eairp:2.1.1
 - 获取项目代码
 
 ```bash
-git clone https://github.com/wansenai/eairp.git
+git clone https://github.com/eairps/eairp.git
 
 cd eairp
 ```

@@ -23,9 +23,8 @@ export interface emailLoginReq {
 export interface registerReq {
   username: string;
   password: string;
-  phoneNumber: string;
   email: string;
-  sms: number;
+  emailCode: number;
 }
 
 export interface queryUserListReq {

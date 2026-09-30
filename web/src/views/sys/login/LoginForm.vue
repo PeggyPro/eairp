@@ -75,23 +75,23 @@
         {{ t('sys.login.registerButton') }}
       </Button> -->
     </FormItem>
-    <ARow class="enter-x" :gutter="[16, 16]">
-      <ACol :md="6" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
-          {{ t('sys.login.mobileSignInFormTitle') }}
-        </Button>
-      </ACol>
-      <ACol :md="6" :xs="24">
+    <ARow class="enter-x" :gutter="[12, 12]">
+<!--      <ACol :md="6" :xs="24">-->
+<!--        <Button block @click="setLoginState(LoginStateEnum.MOBILE)">-->
+<!--          {{ t('sys.login.mobileSignInFormTitle') }}-->
+<!--        </Button>-->
+<!--      </ACol>-->
+      <ACol :md="8" :xs="12">
         <Button block @click="setLoginState(LoginStateEnum.EMAIL)">
           {{ t('sys.login.emailFormTitle') }}
         </Button>
       </ACol>
-      <ACol :md="6" :xs="24">
+      <ACol :md="8" :xs="12">
         <Button block @click="setLoginState(LoginStateEnum.QR_CODE)">
           {{ t('sys.login.qrSignInFormTitle') }}
         </Button>
       </ACol>
-      <ACol :md="6" :xs="24">
+      <ACol :md="8" :xs="12">
         <Button block @click="setLoginState(LoginStateEnum.REGISTER)">
           {{ t('sys.login.registerButton') }}
         </Button>
@@ -108,7 +108,7 @@
 </template>
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
-  import { getCaptcha } from '/@/api/sys/captcha';
+  import { getCaptcha } from '@/api/sys/captcha';
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
   import {
     WechatFilled,
@@ -116,11 +116,11 @@
   } from '@ant-design/icons-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
 
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useI18n } from '@/hooks/web/useI18n';
 
-  import { useUserStore } from '/@/store/modules/user';
+  import { useUserStore } from '@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid, encryptByAES} from './useLogin';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { useDesign } from '@/hooks/web/useDesign';
   import {PageEnum} from "@/enums/pageEnum";
   import {useGo} from "@/hooks/web/usePage";
   //import { onKeyStroke } from '@vueuse/core';

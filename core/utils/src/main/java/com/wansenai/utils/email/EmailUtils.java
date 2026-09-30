@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2033 WanSen AI Team, Inc. All Rights Reserved.
+ * Copyright 2023-2025 EAIRP Team, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -244,94 +244,70 @@ public class EmailUtils {
      * @param to                收件人邮箱
      */
     public static void forgetPasswordEmailNotice(String code, String to) throws Exception {
-        String subject = "【万森ERP系统】: 更改密码说明"; // 主题
+        String subject = "【EAIRP系统】: 更改密码说明"; // 主题
 
         String body = "<pre>\n" +
                 "您好,\n" +
                 "\n" +
-                "   您已要求重置与此电子邮件地址 ("+ to + ")关联的 万森ERP系统 帐户的密码.\n\n" +
+                "   您已要求重置与此电子邮件地址 ("+ to + ")关联的 EAIRP系统 帐户的密码.\n\n" +
                 "   本次验证码是：<b>" + code + "</b>, 该验证码3分钟有效\n\n" +
                 "   如果您没有发起此请求，请忽略此电子邮件, \n" +
                 "   谢谢, \n\n\n" +
-                "   万森AI团队." +
+                "   EAIRP团队." +
                 "</pre>";
         EmailUtils emailUtils = EmailUtils.entity(EmailConstant.EMAIL_HOST, EmailConstant.EMAIL_USER_NAME, EmailConstant.EMAIL_PASSWORD, to, null, subject, body, null);
         emailUtils.send();
     }
 
     public static void resetEmailNotice(String code, String to) throws Exception {
-        String subject = "【万森ERP系统】: 绑定邮箱地址"; // 主题
+        String subject = "【EAIRP系统】: 绑定邮箱地址"; // 主题
 
         String body = "<pre>\n" +
                 "您好,\n" +
                 "\n" +
-                "   您已要求绑定与此电子邮件地址 ("+ to + ")关联的 万森ERP系统帐户.\n\n" +
+                "   您已要求绑定与此电子邮件地址 ("+ to + ")关联的 EAIRP系统帐户.\n\n" +
                 "   本次验证码是：<b>" + code + "</b>, 该验证码3分钟有效\n\n" +
                 "   如果您没有发起此请求，请忽略此电子邮件, \n" +
                 "   谢谢, \n\n\n" +
-                "   万森AI团队." +
+                "   EAIRP团队." +
                 "</pre>";
         EmailUtils emailUtils = EmailUtils.entity(EmailConstant.EMAIL_HOST, EmailConstant.EMAIL_USER_NAME, EmailConstant.EMAIL_PASSWORD, to, null, subject, body, null);
         emailUtils.send();
     }
 
     public static void loginEmailNotice(String code, String to) throws Exception {
-        String subject = "【万森ERP系统】: 邮箱登录验证码"; // 主题
+        String subject = "【EAIRP系统】: 邮箱登录验证码"; // 主题
 
         String body = "<pre>\n" +
                 "您好,\n" +
                 "\n" +
-                "   您正在登录与此电子邮件地址 ("+ to + ")关联的 万森ERP系统帐户.\n\n" +
+                "   您正在登录与此电子邮件地址 ("+ to + ")关联的 EAIRP系统帐户.\n\n" +
                 "   本次验证码是：<b>" + code + "</b>, 该验证码3分钟有效\n\n" +
                 "   如果您没有发起此请求，请忽略此电子邮件, \n" +
                 "   谢谢, \n\n\n" +
-                "   万森AI团队." +
+                "   EAIRP团队." +
                 "</pre>";
         EmailUtils emailUtils = EmailUtils.entity(EmailConstant.EMAIL_HOST, EmailConstant.EMAIL_USER_NAME, EmailConstant.EMAIL_PASSWORD, to, null, subject, body, null);
         emailUtils.send();
     }
 
-    /**
-     * 项目合同通知邮件模板
-     *
-     * @param projectName           项目名称
-     * @param date                  时间
-     * @param to                    收件人邮箱
-     */
-    public static void projectExpirationEmailNotice(String projectName, String date, String to) throws Exception {
-        String subject = "【万森ERP系统】: 项目合同到期通知"; // 主题
+    public static void registerEmailNotice(String code, String to) {
+        String subject = "【EAIRP系统】: 注册验证码"; // 主题
 
         String body = "<pre>\n" +
                 "您好,\n" +
                 "\n" +
-                "   公司签订的<b>" + projectName + "</b>[项目]合同于"+ date +"到期.\n\n" +
-                "   合同期满后, 准备续订(终止)该合同\n" +
+                "   您正在注册与此电子邮件地址 ("+ to + ")关联的 EAIRP系统帐户.\n\n" +
+                "   本次验证码是：<b>" + code + "</b>, 该验证码3分钟有效\n\n" +
+                "   如果您没有发起此请求，请忽略此电子邮件, \n" +
                 "   谢谢, \n\n\n" +
-                "   新融合检测项目 团队." +
+                "   EAIRP团队." +
                 "</pre>";
         EmailUtils emailUtils = EmailUtils.entity(EmailConstant.EMAIL_HOST, EmailConstant.EMAIL_USER_NAME, EmailConstant.EMAIL_PASSWORD, to, null, subject, body, null);
-        emailUtils.send();
-    }
-
-    /**
-     * 季度采样登记人通知邮件模板
-     *
-     * @param projectName           项目名称
-     * @param quarter               季度
-     * @param to                    收件人邮箱
-     */
-    public static void sampleRegistrantEmailNotice(String projectName, String quarter, String to) throws Exception {
-        String subject = "【山东新融和检测有限公司】: 季度签约通知"; // 主题
-
-        String body = "<pre>\n" +
-                "您好,\n" +
-                "\n" +
-                "   公司签订的<b>" + projectName + "</b>[项目]合同已到达第"+ quarter +"签约时间，请处理!\n\n" +
-                "   合同期满后, 准备续订(终止)该合同\n" +
-                "   谢谢, \n\n\n" +
-                "   新融合检测项目 团队." +
-                "</pre>";
-        EmailUtils emailUtils = EmailUtils.entity(EmailConstant.EMAIL_HOST, EmailConstant.EMAIL_USER_NAME, EmailConstant.EMAIL_PASSWORD, to, null, subject, body, null);
-        emailUtils.send();
+        try {
+            emailUtils.send();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

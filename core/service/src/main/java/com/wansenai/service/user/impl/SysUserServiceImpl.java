@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2033 WanSen AI Team, Inc. All Rights Reserved.
+ * Copyright 2023-2025 EAIRP Team, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -15,6 +15,7 @@ package com.wansenai.service.user.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wansenai.entities.system.SysPlatformConfig;
+import com.wansenai.entities.tenant.SysTenant;
 import com.wansenai.entities.warehouse.Warehouse;
 import com.wansenai.mappers.tenant.SysTenantMapper;
 import com.wansenai.mappers.warehouse.WarehouseMapper;
@@ -125,13 +126,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return Response.responseMsg(BaseCodeEnum.PARAMETER_NULL);
         }
 
-        var verifyCode = redisUtil.get(SecurityConstants.REGISTER_VERIFY_CODE_CACHE_PREFIX + accountRegisterDto.getPhoneNumber());
+        var verifyCode = redisUtil.get(SecurityConstants.EMAIL_REGISTER_VERIFY_CODE_CACHE_PREFIX + accountRegisterDto.getEmail());
         if (ObjectUtils.isEmpty(verifyCode)) {
-            return Response.responseMsg(BaseCodeEnum.SMS_VERIFY_CODE_EXPIRE);
+            return Response.responseMsg(BaseCodeEnum.EMAIL_VERIFY_CODE_EXPIRE);
         }
 
-        if (!String.valueOf(verifyCode).equals(accountRegisterDto.getSms())) {
-            return Response.responseMsg(BaseCodeEnum.SMS_VERIFY_CODE_ERROR);
+        if (!String.valueOf(verifyCode).equals(accountRegisterDto.getEmailCode())) {
+            return Response.responseMsg(BaseCodeEnum.EMAIL_VERIFY_CODE_ERROR);
         }
 
         // check if the username under the same tenant is duplicate
@@ -139,8 +140,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return Response.responseMsg(UserCodeEnum.USER_NAME_EXISTS);
         }
 
-        if (checkPhoneNumberExist(accountRegisterDto.getPhoneNumber())) {
-            return Response.responseMsg(UserCodeEnum.USER_REGISTER_PHONE_EXISTS);
+        if (checkEmailExist(accountRegisterDto.getEmail())) {
+            return Response.responseMsg(UserCodeEnum.EMAIL_EXISTS);
         }
 
         var password = "";
@@ -233,6 +234,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .createBy(userId)
                 .build();
         warehouseMapper.insert(warehouse);
+        // 添加租户
+        var tenant = SysTenant.builder()
+                .id(userId)
+                .tenantId(userId)
+                .userId(userId)
+                .name("测试租户")
+                .userNumLimit(10)
+                .type(0)
+                .status(CommonConstants.NOT_DELETED)
+                .createTime(LocalDateTime.now())
+                .expireTime(LocalDateTime.now().plusYears(1))
+                .build();
 
         var userResult = save(user);
         var roleResult = roleMapper.insert(role);
@@ -240,8 +253,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         var userRoleResult = userRoleRelService.save(userRoleRel);
         var userDepartmentResult = userDeptRelService.save(userDepartmentRel);
         var roleMenuResult = roleMenuRelService.save(roleMenuRel);
+        var tenantResult = tenantMapper.insert(tenant);
 
-        if (!userResult && roleResult!=0 && departmentResult!=0 && !userRoleResult && !userDepartmentResult && !roleMenuResult) {
+        if (!userResult && roleResult!=0 && departmentResult!=0 && !userRoleResult && !userDepartmentResult && !roleMenuResult && tenantResult!=0) {
             return Response.fail();
         }
 
@@ -251,7 +265,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Response<UserInfoVO> accountLogin(AccountLoginDTO accountLoginDto){
 
-        var verifyCode = redisUtil.get(SecurityConstants.EMAIL_VERIFY_CODE_CACHE_PREFIX + accountLoginDto.getCaptchaId());
+        var verifyCode = redisUtil.get(SecurityConstants.VERIFY_CODE_CACHE_PREFIX + accountLoginDto.getCaptchaId());
         if (ObjectUtils.isEmpty(verifyCode)) {
             return Response.responseMsg(BaseCodeEnum.VERIFY_CODE_EXPIRE);
         }

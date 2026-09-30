@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2033 WanSen AI Team, Inc. All Rights Reserved.
+ * Copyright 2023-2025 EAIRP Team, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -26,9 +26,11 @@ public interface SecurityConstants {
 
     String UPDATE_PHONE_VERIFY_CODE_CACHE_PREFIX = "AUTH:VERIFY_CODE:UPDATE_PHONE:";
 
-    String EMAIL_VERIFY_CODE_CACHE_PREFIX = "AUTH:VERIFY_CODE:EMAIL:";
+    String VERIFY_CODE_CACHE_PREFIX = "AUTH:VERIFY_CODE:";
 
     String EMAIL_RESET_VERIFY_CODE_CACHE_PREFIX = "AUTH:VERIFY_CODE:EMAIL_RESET:";
+
+    String EMAIL_REGISTER_VERIFY_CODE_CACHE_PREFIX = "AUTH:VERIFY_CODE:EMAIL_REGISTER:";
 
     String EMAIL_LOGIN_VERIFY_CODE_CACHE_PREFIX = "AUTH:VERIFY_CODE:EMAIL_LOGIN:";
 

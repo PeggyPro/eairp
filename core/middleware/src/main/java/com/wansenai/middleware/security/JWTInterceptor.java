@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2033 WanSen AI Team, Inc. All Rights Reserved.
+ * Copyright 2023-2025 EAIRP Team, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -12,7 +12,7 @@
  */
 package com.wansenai.middleware.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.wansenai.utils.redis.RedisUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +46,7 @@ public class JWTInterceptor implements HandlerInterceptor { //校验类
             Claims claims = jwtUtil.checkToken(request.getHeader("Authorization"));
             if (claims != null) {
                 String token = redisUtil.getString(claims.get("userName") + ":token");
-                if(Boolean.TRUE.equals(redisUtil.hasKey(claims.get("userName") + ":token"))){
+                if(redisUtil.hasKey(claims.get("userName") + ":token")){
                     if(requestToken.equals(token)){
                         // token正确
                         return true;

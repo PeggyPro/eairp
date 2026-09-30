@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2033 WanSen AI Team, Inc. All Rights Reserved.
+ * Copyright 2023-2025 EAIRP Team, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -168,7 +168,7 @@ public class CommonServiceImpl implements CommonService{
         try (FastByteArrayOutputStream fos = new FastByteArrayOutputStream()) {
             ImageIO.write(bi, "jpg", fos);
             imgEncode = Base64.getEncoder().encodeToString(fos.toByteArray());
-            redisUtil.set(SecurityConstants.EMAIL_VERIFY_CODE_CACHE_PREFIX + captchaId, text, 180);
+            redisUtil.set(SecurityConstants.VERIFY_CODE_CACHE_PREFIX + captchaId, text, 180);
             fos.flush();
         } catch (Exception e) {
             log.error("获取验证码失败: " + e.getMessage());
@@ -292,6 +292,18 @@ public class CommonServiceImpl implements CommonService{
                         redisUtil.set(SecurityConstants.EMAIL_LOGIN_VERIFY_CODE_CACHE_PREFIX + email, resultCode3);
                         redisUtil.expire(SecurityConstants.EMAIL_LOGIN_VERIFY_CODE_CACHE_PREFIX + email, 180);
                         EmailUtils.loginEmailNotice(resultCode3, email);
+                    }
+                    break;
+                case 3:
+                    String resultCode4 = "";
+                    if (redisUtil.hasKey(SecurityConstants.EMAIL_REGISTER_VERIFY_CODE_CACHE_PREFIX + email)) {
+                        resultCode4 = redisUtil.getString(SecurityConstants.EMAIL_REGISTER_VERIFY_CODE_CACHE_PREFIX + email);
+                        EmailUtils.registerEmailNotice(resultCode4, email);
+                    } else {
+                        resultCode4 = getForgetCode();
+                        redisUtil.set(SecurityConstants.EMAIL_REGISTER_VERIFY_CODE_CACHE_PREFIX + email, resultCode4);
+                        redisUtil.expire(SecurityConstants.EMAIL_REGISTER_VERIFY_CODE_CACHE_PREFIX + email, 180);
+                        EmailUtils.registerEmailNotice(resultCode4, email);
                     }
                     break;
                 default:
@@ -841,14 +853,14 @@ public class CommonServiceImpl implements CommonService{
             fileList.addAll(fileMapper.selectBatchIds(ids)
                     .stream()
                     .map(item ->
-                            FileDataBO.builder(
-                                    item.getFileName(),
-                                    item.getFileUrl(),
-                                    item.getId(),
-                                    item.getUid(),
-                                    item.getFileType(),
-                                    item.getFileSize()
-                            ))
+                            FileDataBO.builder()
+                                    .id(item.getId())
+                                    .fileName(item.getFileName())
+                                    .fileSize(item.getFileSize())
+                                    .fileType(item.getFileType())
+                                    .fileUrl(item.getFileUrl())
+                                    .uid(item.getUid())
+                                    .build())
                     .toList());
         }
         return fileList;

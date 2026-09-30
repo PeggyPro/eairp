@@ -50,16 +50,16 @@
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { AppLogo, AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
+import { AppLogo, AppLocalePicker, AppDarkModeToggle } from '@/components/Application';
 import LoginForm from './LoginForm.vue';
 import ForgetPasswordForm from './ForgetPasswordForm.vue';
 import RegisterForm from './RegisterForm.vue';
 import MobileForm from './MobileForm.vue';
 import QrCodeForm from './QrCodeForm.vue';
-import { useGlobSetting } from '/@/hooks/setting';
-import { useI18n } from '/@/hooks/web/useI18n';
-import { useDesign } from '/@/hooks/web/useDesign';
-import { useLocaleStore } from '/@/store/modules/locale';
+import { useGlobSetting } from '@/hooks/setting';
+import { useI18n } from '@/hooks/web/useI18n';
+import { useDesign } from '@/hooks/web/useDesign';
+import { useLocaleStore } from '@/store/modules/locale';
 import EmailForm from "@/views/sys/login/EmailForm.vue";
 
 defineProps({
